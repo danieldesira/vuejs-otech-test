@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { axiosInstance } from '@/axiosInstance'
 import InputText from '@/components/InputText.vue'
-import DropDown from '@/components/Dropdown.vue'
+import DropDown from '@/components/DropDown.vue'
 import type { Task } from '@/interfaces'
 
 const route = useRoute()
