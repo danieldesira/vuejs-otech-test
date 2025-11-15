@@ -5,7 +5,7 @@ defineProps(['task'])
 </script>
 
 <template>
-  <RouterLink to="/edit-task/:id">
+  <RouterLink :to="`/edit-task/${task.id}`">
     <div class="flex flex-col gap-2 bg-slate-500 rounded-sm p-5">
       <strong class="font-bold text-[14px]">{{ task.title }}</strong>
       <span class="text-[12px]">{{ task.description }}</span>
