@@ -1,0 +1,44 @@
+{
+  "tasks": [
+    {
+      "title": "First task",
+      "description": "Do as you please",
+      "priority": "medium",
+      "status": "completed",
+      "dateDue": "2025-11-19",
+      "id": "05a3"
+    },
+    {
+      "title": "Second task",
+      "description": "Do as you please",
+      "priority": "low",
+      "status": "completed",
+      "dateDue": "2025-11-19",
+      "id": "5ca1"
+    },
+    {
+      "title": "Third task",
+      "description": "Buy apples",
+      "priority": "high",
+      "status": "pending",
+      "dateDue": "2025-12-19",
+      "id": "f22a"
+    },
+    {
+      "id": "c255",
+      "title": "New Task",
+      "description": "This is a newly created task.",
+      "priority": "low",
+      "status": "pending",
+      "dueDate": "2025-12-20"
+    },
+    {
+      "id": "e338",
+      "title": "New Task",
+      "description": "This is a newly created task.",
+      "priority": "low",
+      "status": "pending",
+      "dueDate": "2025-12-20"
+    }
+  ]
+}
