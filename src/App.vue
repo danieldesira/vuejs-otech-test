@@ -3,10 +3,10 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header class="flex bg-slate-500">
+  <header class="flex bg-slate-500 max-h-12 items-center min-w-full px-5">
     <div class="flex gap-5 w-full">
       <nav class="flex gap-2 text-[12px] font-semibold">
-        <RouterLink to="/">View Tasks</RouterLink>
+        <RouterLink to="/" class="focus:bg-slate-950 rounded-sm">View Tasks</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div>

@@ -36,6 +36,10 @@ onMounted(async () => {
     dateDue: task.dueDate,
   }
 })
+
+const deleteTask = async () => {
+  await axiosInstance.delete(`tasks/${taskId}`)
+}
 </script>
 
 <template>
@@ -54,6 +58,13 @@ onMounted(async () => {
       <InputText id="date-due" label="Date Due" type="date" v-model="formData.dateDue" />
       <button type="submit" class="bg-slate-500 text-white font-bold py-2 px-4 rounded-sm w-fit">
         Update Task
+      </button>
+      <button
+        type="button"
+        class="bg-red-500 text-white font-bold py-2 px-4 rounded-sm w-fit"
+        @click="deleteTask"
+      >
+        Delete Task
       </button>
     </form>
   </main>
