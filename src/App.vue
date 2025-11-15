@@ -7,7 +7,7 @@ import { RouterLink, RouterView } from 'vue-router'
     <div class="flex gap-5 w-full">
       <nav class="flex gap-2 text-[12px] font-semibold">
         <RouterLink to="/" class="focus:bg-slate-950 rounded-sm">View Tasks</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/about" class="focus:bg-slate-950 rounded-sm">About</RouterLink>
       </nav>
     </div>
   </header>

@@ -55,6 +55,22 @@
       "priority": "medium",
       "status": "completed",
       "dateDue": ""
+    },
+    {
+      "id": "12bd",
+      "title": "llool",
+      "description": "This is a newly created task.",
+      "priority": "medium",
+      "status": "completed",
+      "dateDue": "2025-12-20"
+    },
+    {
+      "id": "57e2",
+      "title": "llool",
+      "description": "This is a newly created task.",
+      "priority": "medium",
+      "status": "completed",
+      "dateDue": "2025-12-20"
     }
   ]
 }
