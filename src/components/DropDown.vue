@@ -13,7 +13,12 @@ defineModel<string>()
       :value="modelValue"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     >
-      <option v-for="option in options" :key="option" :value="option">
+      <option
+        v-for="option in options"
+        :key="option"
+        :value="option"
+        class="capitalize text-slate-700"
+      >
         {{ option }}
       </option>
     </select>

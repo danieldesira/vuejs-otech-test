@@ -5,9 +5,13 @@ import { axiosInstance } from '@/axiosInstance'
 import InputText from '@/components/InputText.vue'
 import DropDown from '@/components/DropDown.vue'
 import type { Task } from '@/interfaces'
+import LoadingOverlay from '@/components/LoadingOverlay.vue'
+import { useToast } from 'vue-toast-notification'
+import router from '@/router'
 
 const route = useRoute()
 const taskId = route.params.id
+const $toast = useToast()
 
 const formData = ref({
   title: '',
@@ -16,29 +20,53 @@ const formData = ref({
   status: '',
   dateDue: '',
 })
+const isWaiting = ref(false)
 
 const priorityOptions = ['low', 'medium', 'high']
 const statusOptions = ['pending', 'completed']
 
 const submitForm = async (event: Event) => {
   event.preventDefault()
-  await axiosInstance.put(`tasks/${taskId}`, formData.value)
+  isWaiting.value = true
+  try {
+    await axiosInstance.put(`tasks/${taskId}`, formData.value)
+    $toast.success('Task updated successfully.')
+  } catch {
+    $toast.error('Failed to fetch task details.')
+  } finally {
+    isWaiting.value = false
+  }
 }
 
 onMounted(async () => {
-  const response = await axiosInstance.get<Task>(`tasks/${taskId}`)
-  const task = response.data
-  formData.value = {
-    title: task.title,
-    description: task.description,
-    priority: task.priority,
-    status: task.status,
-    dateDue: task.dueDate,
+  isWaiting.value = true
+  try {
+    const response = await axiosInstance.get<Task>(`tasks/${taskId}`)
+    const task = response.data
+    formData.value = {
+      title: task.title,
+      description: task.description,
+      priority: task.priority,
+      status: task.status,
+      dateDue: task.dueDate,
+    }
+  } catch {
+    $toast.error('Failed to fetch task details.')
+  } finally {
+    isWaiting.value = false
   }
 })
 
 const deleteTask = async () => {
-  await axiosInstance.delete(`tasks/${taskId}`)
+  isWaiting.value = true
+  try {
+    await axiosInstance.delete(`tasks/${taskId}`)
+    router.push({ path: '/' })
+  } catch {
+    $toast.error('Failed to fetch task details.')
+  } finally {
+    isWaiting.value = false
+  }
 }
 </script>
 
@@ -67,5 +95,6 @@ const deleteTask = async () => {
         Delete Task
       </button>
     </form>
+    <LoadingOverlay v-if="isWaiting" />
   </main>
 </template>

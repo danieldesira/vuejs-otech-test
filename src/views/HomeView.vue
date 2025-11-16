@@ -5,6 +5,8 @@ import { ref, onMounted, watch } from 'vue'
 import TaskCard from '@/components/TaskCard.vue'
 import InputText from '@/components/InputText.vue'
 import DropDown from '@/components/DropDown.vue'
+import { useToast } from 'vue-toast-notification'
+import LoadingOverlay from '@/components/LoadingOverlay.vue'
 
 const tasks = ref<Task[]>([])
 const searchFormData = ref({
@@ -15,27 +17,34 @@ const searchFormData = ref({
   dueDateFilter: '',
 })
 const selectedSort = ref('')
+const isLoading = ref(false)
 
-const statusOptions = ref(['', 'pending', 'completed'])
+const statusOptions = ['', 'pending', 'completed']
 
-const priorityOptions = ref(['', 'low', 'medium', 'high'])
+const priorityOptions = ['', 'low', 'medium', 'high']
 
-const sortOptions = ref([
+const sortOptions = [
   { label: 'Title Ascending', value: 'title_asc' },
   { label: 'Title Descending', value: 'title_desc' },
   { label: 'Due Date Ascending', value: 'dateDue_asc' },
   { label: 'Due Date Descending', value: 'dateDue_desc' },
-])
+]
 
-const fetchTasks = async () => {
+const $toast = useToast()
+
+const fetchAllTasks = async () => {
+  isLoading.value = true
   try {
     const response = await axiosInstance.get<Task[]>('tasks')
     tasks.value = response.data
+  } catch {
+    $toast.error('Failed to fetch tasks.')
   } finally {
+    isLoading.value = false
   }
 }
 
-onMounted(async () => await fetchTasks())
+onMounted(async () => await fetchAllTasks())
 
 watch(
   searchFormData,
@@ -59,7 +68,7 @@ watch(
         })
       ).data
     } else {
-      await fetchTasks()
+      await fetchAllTasks()
     }
   },
   { deep: true },
@@ -82,7 +91,7 @@ watch(selectedSort, async (newQuery) => {
       }
     })
   } else {
-    await fetchTasks()
+    await fetchAllTasks()
   }
 })
 </script>
@@ -139,5 +148,6 @@ watch(selectedSort, async (newQuery) => {
         <i class="pi pi-plus text-white text-5xl"></i>
       </div>
     </RouterLink>
+    <LoadingOverlay v-if="isLoading" />
   </main>
 </template>

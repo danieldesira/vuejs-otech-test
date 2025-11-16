@@ -2,7 +2,9 @@
 import { ref } from 'vue'
 import { axiosInstance } from '@/axiosInstance'
 import InputText from '@/components/InputText.vue'
-import DropDown from '@/components/Dropdown.vue'
+import DropDown from '@/components/DropDown.vue'
+import { useToast } from 'vue-toast-notification'
+import router from '@/router'
 
 const formData = ref({
   title: '',
@@ -11,13 +13,25 @@ const formData = ref({
   status: '',
   dateDue: '',
 })
+const isWaiting = ref(false)
+
+const $toast = useToast()
 
 const priorityOptions = ['low', 'medium', 'high']
 const statusOptions = ['pending', 'completed']
 
 const submitForm = async (event: Event) => {
   event.preventDefault()
-  await axiosInstance.post('tasks', formData.value)
+  isWaiting.value = true
+  try {
+    await axiosInstance.post('tasks', formData.value)
+    $toast.success('Task updated successfully.')
+    router.push({ path: '/' })
+  } catch {
+    $toast.error('Failed to fetch task details.')
+  } finally {
+    isWaiting.value = false
+  }
 }
 </script>
 
