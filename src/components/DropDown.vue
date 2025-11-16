@@ -11,7 +11,7 @@ defineModel<string>()
       class="border border-slate-500 rounded-sm p-2 w-full h-10"
       :id="id"
       :value="modelValue"
-      @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      @input="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
     >
       <option
         v-for="option in options"
