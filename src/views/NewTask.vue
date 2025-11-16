@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { axiosInstance } from '@/axiosInstance'
 import InputText from '@/components/InputText.vue'
 import DropDown from '@/components/DropDown.vue'
 import { useToast } from 'vue-toast-notification'
-import router from '@/router'
 
+const router = useRouter()
 const formData = ref({
   title: '',
   description: '',
@@ -25,10 +26,10 @@ const submitForm = async (event: Event) => {
   isWaiting.value = true
   try {
     await axiosInstance.post('tasks', formData.value)
-    $toast.success('Task updated successfully.')
-    router.push({ path: '/' })
+    $toast.success('Task created successfully.')
+    router.push('/')
   } catch {
-    $toast.error('Failed to fetch task details.')
+    $toast.error('Failed to create task.')
   } finally {
     isWaiting.value = false
   }

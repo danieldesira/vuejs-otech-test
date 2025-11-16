@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { axiosInstance } from '@/axiosInstance'
 import InputText from '@/components/InputText.vue'
 import DropDown from '@/components/DropDown.vue'
 import type { Task } from '@/interfaces'
 import LoadingOverlay from '@/components/LoadingOverlay.vue'
 import { useToast } from 'vue-toast-notification'
-import router from '@/router'
 
 const route = useRoute()
 const taskId = route.params.id
 const $toast = useToast()
+const router = useRouter()
 
 const formData = ref({
   title: '',
@@ -61,7 +61,8 @@ const deleteTask = async () => {
   isWaiting.value = true
   try {
     await axiosInstance.delete(`tasks/${taskId}`)
-    router.push({ path: '/' })
+    $toast.success('Task deleted successfully.')
+    router.push('/')
   } catch {
     $toast.error('Failed to fetch task details.')
   } finally {

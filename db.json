@@ -33,30 +33,6 @@
       "dueDate": "2025-12-20"
     },
     {
-      "id": "053e",
-      "title": "hello world",
-      "description": "",
-      "priority": "",
-      "status": "",
-      "dateDue": ""
-    },
-    {
-      "id": "2c20",
-      "title": "hello world",
-      "description": "",
-      "priority": "",
-      "status": "",
-      "dateDue": ""
-    },
-    {
-      "id": "d453",
-      "title": "kkkkkk",
-      "description": "eqrfwerf",
-      "priority": "medium",
-      "status": "completed",
-      "dateDue": ""
-    },
-    {
       "id": "12bd",
       "title": "llool",
       "description": "This is a newly created task.",
@@ -70,30 +46,6 @@
       "priority": "medium",
       "status": "completed",
       "id": "57e2"
-    },
-    {
-      "id": "3b0f",
-      "title": "kollox",
-      "description": "",
-      "priority": "",
-      "status": "",
-      "dateDue": ""
-    },
-    {
-      "id": "faf1",
-      "title": "kollox",
-      "description": "",
-      "priority": "",
-      "status": "",
-      "dateDue": ""
-    },
-    {
-      "id": "a7d2",
-      "title": "hajt",
-      "description": "",
-      "priority": "",
-      "status": "",
-      "dateDue": ""
     }
   ]
 }
