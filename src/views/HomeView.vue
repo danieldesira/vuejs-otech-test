@@ -89,41 +89,45 @@ watch(selectedSort, async (newQuery) => {
 
 <template>
   <main class="flex flex-wrap gap-5 p-5">
-    <section class="flex gap-1">
-      <InputText
-        id="search-title"
-        label="Search Tasks by Title"
-        v-model="searchFormData.titleFilter"
-      />
-      <InputText
-        id="search-description"
-        label="Search Tasks by Description"
-        v-model="searchFormData.descriptionFilter"
-      />
-      <DropDown
-        id="filter-status"
-        label="Filter by Status"
-        v-model="searchFormData.statusFilter"
-        :options="statusOptions"
-      />
-      <DropDown
-        id="filter-priority"
-        label="Filter by Priority"
-        v-model="searchFormData.priorityFilter"
-        :options="priorityOptions"
-      />
-      <InputText
-        id="filter-due-date"
-        label="Filter by Due Date"
-        type="date"
-        v-model="searchFormData.dueDateFilter"
-      />
-      <DropDown
-        id="sort"
-        label="Sort By"
-        v-model="selectedSort"
-        :options="sortOptions.map((option) => option.label)"
-      />
+    <section class="flex flex-col gap-1">
+      <section class="flex gap-1">
+        <InputText
+          id="search-title"
+          label="Search Tasks by Title"
+          v-model="searchFormData.titleFilter"
+        />
+        <InputText
+          id="search-description"
+          label="Search Tasks by Description"
+          v-model="searchFormData.descriptionFilter"
+        />
+        <DropDown
+          id="filter-status"
+          label="Filter by Status"
+          v-model="searchFormData.statusFilter"
+          :options="statusOptions"
+        />
+        <DropDown
+          id="filter-priority"
+          label="Filter by Priority"
+          v-model="searchFormData.priorityFilter"
+          :options="priorityOptions"
+        />
+        <InputText
+          id="filter-due-date"
+          label="Filter by Due Date"
+          type="date"
+          v-model="searchFormData.dueDateFilter"
+        />
+      </section>
+      <section class="flex gap-1">
+        <DropDown
+          id="sort"
+          label="Sort By"
+          v-model="selectedSort"
+          :options="sortOptions.map((option) => option.label)"
+        />
+      </section>
     </section>
     <section class="flex flex-wrap gap-5">
       <TaskCard v-for="task in tasks" :key="task.id" :task="task" />
