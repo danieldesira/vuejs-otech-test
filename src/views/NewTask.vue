@@ -21,8 +21,30 @@ const $toast = useToast()
 const priorityOptions = ['low', 'medium', 'high']
 const statusOptions = ['pending', 'completed']
 
+const getTimestampWithoutTime = (timestamp: number) => {
+  const date = new Date(timestamp)
+  date.setHours(0, 0, 0, 0)
+  return date.getTime()
+}
+
+const validateForm = () => {
+  if (
+    formData.value.dateDue &&
+    Date.parse(formData.value.dateDue) < getTimestampWithoutTime(Date.now())
+  ) {
+    $toast.error('Due date cannot be in the past.')
+    return false
+  }
+  return true
+}
+
 const submitForm = async (event: Event) => {
   event.preventDefault()
+
+  if (!validateForm()) {
+    return
+  }
+
   isWaiting.value = true
   try {
     await axiosInstance.post('tasks', formData.value)
