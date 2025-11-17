@@ -16,7 +16,7 @@ const searchFormData = ref({
   priorityFilter: '',
   dueDateFilter: '',
 })
-const selectedSort = ref('')
+const selectedSort = ref()
 const isLoading = ref(false)
 
 const statusOptions = ['', 'pending', 'completed']
@@ -24,10 +24,10 @@ const statusOptions = ['', 'pending', 'completed']
 const priorityOptions = ['', 'low', 'medium', 'high']
 
 const sortOptions = [
-  { label: 'Title Ascending', value: 'title_asc' },
-  { label: 'Title Descending', value: 'title_desc' },
-  { label: 'Due Date Ascending', value: 'dateDue_asc' },
-  { label: 'Due Date Descending', value: 'dateDue_desc' },
+  'Title Ascending',
+  'Title Descending',
+  'Due Date Ascending',
+  'Due Date Descending',
 ]
 
 const $toast = useToast()
@@ -56,17 +56,24 @@ watch(
       newQuery.dueDateFilter ||
       newQuery.priorityFilter
     ) {
-      tasks.value = (
-        await axiosInstance.get<Task[]>('tasks', {
-          params: {
-            title: newQuery.titleFilter,
-            description: newQuery.descriptionFilter,
-            status: newQuery.statusFilter || undefined,
-            dueDate: newQuery.dueDateFilter || undefined,
-            priority: newQuery.priorityFilter || undefined,
-          },
-        })
-      ).data
+      isLoading.value = true
+      try {
+        tasks.value = (
+          await axiosInstance.get<Task[]>('tasks', {
+            params: {
+              title: newQuery.titleFilter,
+              description: newQuery.descriptionFilter,
+              status: newQuery.statusFilter || undefined,
+              dueDate: newQuery.dueDateFilter || undefined,
+              priority: newQuery.priorityFilter || undefined,
+            },
+          })
+        ).data
+      } catch {
+        $toast.error('Failed to fetch tasks.')
+      } finally {
+        isLoading.value = false
+      }
     } else {
       await fetchAllTasks()
     }
@@ -74,24 +81,40 @@ watch(
   { deep: true },
 )
 
-watch(selectedSort, async (newQuery) => {
-  if (newQuery) {
-    tasks.value = tasks.value.sort((a, b) => {
-      switch (newQuery) {
-        case 'title_asc':
-          return a.title.localeCompare(b.title)
-        case 'title_desc':
-          return b.title.localeCompare(a.title)
-        case 'dateDue_asc':
-          return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
-        case 'dateDue_desc':
-          return new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
-        default:
-          return 0
+watch(selectedSort, async (newSort) => {
+  isLoading.value = true
+  try {
+    if (newSort) {
+      const sortMap: Record<string, { field: string; order: 'asc' | 'desc' }> = {
+        'Title Ascending': { field: 'title', order: 'asc' },
+        'Title Descending': { field: 'title', order: 'desc' },
+        'Date Due Ascending': { field: 'dueDate', order: 'asc' },
+        'Date Due Descending': { field: 'dueDate', order: 'desc' },
       }
-    })
-  } else {
-    await fetchAllTasks()
+
+      const sortConfig = sortMap[newSort]
+      console.log(sortConfig)
+      if (!sortConfig) return
+
+      const response = await axiosInstance.get<Task[]>('tasks', {
+        params: {
+          _sort: sortConfig.field,
+          _order: sortConfig.order,
+          title: searchFormData.value.titleFilter || undefined,
+          description: searchFormData.value.descriptionFilter || undefined,
+          status: searchFormData.value.statusFilter || undefined,
+          dueDate: searchFormData.value.dueDateFilter || undefined,
+          priority: searchFormData.value.priorityFilter || undefined,
+        },
+      })
+      tasks.value = response.data
+    } else {
+      await fetchAllTasks()
+    }
+  } catch {
+    $toast.error('Failed to sort tasks.')
+  } finally {
+    isLoading.value = false
   }
 })
 </script>
@@ -99,7 +122,7 @@ watch(selectedSort, async (newQuery) => {
 <template>
   <main class="flex flex-wrap gap-5 p-5">
     <section class="flex flex-col gap-1">
-      <section class="flex gap-1">
+      <section class="flex gap-1 flex-wrap">
         <InputText
           id="search-title"
           label="Search Tasks by Title"
@@ -129,13 +152,8 @@ watch(selectedSort, async (newQuery) => {
           v-model="searchFormData.dueDateFilter"
         />
       </section>
-      <section class="flex gap-1">
-        <DropDown
-          id="sort"
-          label="Sort By"
-          v-model="selectedSort"
-          :options="sortOptions.map((option) => option.label)"
-        />
+      <section class="flex gap-1 flex-wrap">
+        <DropDown id="sort" label="Sort By" v-model="selectedSort" :options="sortOptions" />
       </section>
     </section>
     <section class="flex flex-wrap gap-5">
