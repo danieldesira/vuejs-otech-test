@@ -93,8 +93,9 @@ watch(selectedSort, async (newSort) => {
       }
 
       const sortConfig = sortMap[newSort]
-      console.log(sortConfig)
-      if (!sortConfig) return
+      if (!sortConfig) {
+        return
+      }
 
       const response = await axiosInstance.get<Task[]>('tasks', {
         params: {
